@@ -23,7 +23,7 @@ public class UserController {
         Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
         User userDetails = (User) authentication.getPrincipal();
         user.addAttribute("user", userService.getUserById(userDetails.getId()).get());
-        return "/user/user_page";
+        return "user_page";
     }
 
 }

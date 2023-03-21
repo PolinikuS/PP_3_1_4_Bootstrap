@@ -5,6 +5,7 @@ import org.springframework.security.core.userdetails.UserDetails;
 
 import javax.persistence.*;
 import java.util.Collection;
+import java.util.Objects;
 import java.util.Set;
 
 
@@ -84,6 +85,15 @@ public class User implements UserDetails {
 
     public void setRoles(Set<Role> roles) {
         this.roles = roles;
+    }
+
+    public boolean isAdmin() {
+        for (Role role : roles) {
+            if (Objects.equals(role.getRoleName(), "ROLE_ADMIN")) {
+                return true;
+            }
+        }
+        return false;
     }
 
     @Override

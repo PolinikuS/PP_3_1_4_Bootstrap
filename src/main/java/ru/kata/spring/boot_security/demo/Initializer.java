@@ -19,7 +19,7 @@ public class Initializer {
 
     @PostConstruct
     public void init() {
-        User admin = new User("admin@mail.ru", "admin");
+        User admin = new User("admin1@mail.ru", "admin");
         Role userRole = new Role("ROLE_USER");
         Role adminRole = new Role("ROLE_ADMIN");
 

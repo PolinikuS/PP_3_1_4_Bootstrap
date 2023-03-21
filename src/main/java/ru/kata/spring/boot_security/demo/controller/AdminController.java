@@ -7,6 +7,8 @@ import ru.kata.spring.boot_security.demo.model.User;
 import ru.kata.spring.boot_security.demo.service.RoleService;
 import ru.kata.spring.boot_security.demo.service.UserServiceImpl;
 
+import java.security.Principal;
+
 @Controller
 @RequestMapping("/admin")
 public class AdminController {
@@ -20,16 +22,13 @@ public class AdminController {
     }
 
     @GetMapping("/page")
-    public String adminPage(Model model) {
+    public String adminPage(Model model, Principal principal) {
+        User user = userService.getUserByEmail(principal.getName());
+        model.addAttribute("principal",user);
         model.addAttribute("users", userService.getAllUsers());
-        return "/admin/admin_page";
-    }
-
-    @GetMapping("/redactor/{id}")
-    public String getAdminRedactor(Model user, Model roles, @PathVariable("id") Long id) {
-        roles.addAttribute("allRoles", roleService.findAll());
-        user.addAttribute("user", userService.getUserById(id).get());
-        return "/admin/admin_redactor";
+        model.addAttribute("roles", roleService.findAll());
+        model.addAttribute("newUser", new User());
+        return "admin_page";
     }
 
     @PatchMapping("/redactor/{id}")
@@ -42,12 +41,6 @@ public class AdminController {
     public String adminDelete(@PathVariable("id") Long id) {
         userService.delete(id);
         return "redirect:/admin/page";
-    }
-
-    @GetMapping("/registration")
-    public String registrationGet(@ModelAttribute("newuser") User user, Model roles) {
-        roles.addAttribute("allRoles", roleService.findAll());
-        return "/admin/registration";
     }
 
     @PostMapping("/registration")
